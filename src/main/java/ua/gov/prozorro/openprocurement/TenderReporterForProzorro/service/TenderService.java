@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.Tender;
 import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.TenderFetchProperties;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.TendersResponse;
+import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.records.TenderRecord;
+import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.records.TendersResponse;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -28,7 +28,7 @@ public class TenderService {
         this.tenderFetchProperties = tenderFetchProperties;
     }
 
-    public List<Tender> fetchAllTenders() {
+    public List<TenderRecord> fetchAllTenders() {
         ZonedDateTime startDate = tenderFetchProperties.startDate().atStartOfDay(ZoneOffset.UTC);
         logger.info("Start Date in ZonedDateTime: {}", startDate);
         ZonedDateTime endDate = tenderFetchProperties.endDate().atStartOfDay(ZoneOffset.UTC);
@@ -36,7 +36,7 @@ public class TenderService {
         int maxRecords = tenderFetchProperties.maxRecords();
         logger.info("maxRecords: {}", maxRecords);
 
-        List<Tender> allTenders = new ArrayList<>();
+        List<TenderRecord> allTenderRecords = new ArrayList<>();
         // Use startDate + 1 day as the offset to ensure we include tenders modified exactly at startDate
         // (due to descending order and exclusive offset behavior)
         String lastDateModified = String.valueOf(startDate.plusDays(1).toEpochSecond());
@@ -44,26 +44,26 @@ public class TenderService {
         int totalFetched = 0;
 
         while (totalFetched < maxRecords) {
-            List<Tender> batch = fetchBatch(lastDateModified);
+            List<TenderRecord> batch = fetchBatch(lastDateModified);
             if (batch.isEmpty()) break;
 
-            for (Tender tender : batch) {
-                ZonedDateTime tenderDate = tender.dateModified().atZoneSameInstant(ZoneOffset.UTC);
+            for (TenderRecord tenderRecord : batch) {
+                ZonedDateTime tenderDate = tenderRecord.dateModified().atZoneSameInstant(ZoneOffset.UTC);
                 if (tenderDate.isBefore(startDate)) {
-                    return allTenders;
+                    return allTenderRecords;
                 }
                 if (!tenderDate.isBefore(startDate) && tenderDate.isBefore(endDate)) {
-                    allTenders.add(tender);
+                    allTenderRecords.add(tenderRecord);
                     totalFetched++;
                 }
             }
             lastDateModified = batch.get(batch.size() - 1).dateModified().toString();
         }
-        logger.info("List of tenders: {}", allTenders);
-        return allTenders;
+        logger.info("List of tenders: {}", allTenderRecords);
+        return allTenderRecords;
     }
 
-    private List<Tender> fetchBatch(String offsetTimestamp) {
+    private List<TenderRecord> fetchBatch(String offsetTimestamp) {
         logger.info("Fetching batch with offset: {}", offsetTimestamp);
 
         return webClient.get()
@@ -75,7 +75,7 @@ public class TenderService {
                     if (offsetTimestamp != null) {
                         uri.queryParam("offset", offsetTimestamp);
                     }
-
+                    uri.queryParam("opt_fields", "procuringEntity");
                     var builtUri = uri.build();
                     logger.info("Built URI for request: {}", builtUri);
                     return builtUri;

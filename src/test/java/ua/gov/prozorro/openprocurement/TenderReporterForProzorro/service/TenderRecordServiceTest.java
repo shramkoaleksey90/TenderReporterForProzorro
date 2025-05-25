@@ -3,7 +3,7 @@ package ua.gov.prozorro.openprocurement.TenderReporterForProzorro.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.Tender;
+import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.records.TenderRecord;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ class TenderServiceTest {
 
     @Test
     void testFetchAllTenders_ReturnsNonEmptyList() {
-        List<Tender> tenders = tenderService.fetchAllTenders();
-        assertThat(tenders).hasSizeGreaterThan(10); // Verify multi-batch
-        assertThat(tenders.get(0).id()).isNotNull();
+        List<TenderRecord> tenderRecords = tenderService.fetchAllTenders();
+        assertThat(tenderRecords).hasSizeGreaterThan(10); // Verify multi-batch
+        assertThat(tenderRecords.get(0).id()).isNotNull();
     }
 }

@@ -3,7 +3,7 @@ package ua.gov.prozorro.openprocurement.TenderReporterForProzorro.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.Tender;
+import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.records.TenderRecord;
 import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.service.TenderService;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class TenderController {
     }
 
     @GetMapping
-    public List<Tender> getAllTenders() {
+    public List<TenderRecord> getAllTenders() {
         return tenderService.fetchAllTenders();
     }
 }

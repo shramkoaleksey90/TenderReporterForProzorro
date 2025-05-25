@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import java.time.LocalDate;
 
 @Validated
-@ConfigurationProperties(prefix = "tender.fetch")
+@ConfigurationProperties(prefix = "tender.record.fetch")
 public record TenderFetchProperties(
         LocalDate startDate,
         LocalDate endDate,
