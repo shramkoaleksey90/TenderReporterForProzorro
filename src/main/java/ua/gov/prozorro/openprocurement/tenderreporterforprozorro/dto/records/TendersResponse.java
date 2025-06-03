@@ -1,4 +1,4 @@
-package ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.records;
+package ua.gov.prozorro.openprocurement.tenderreporterforprozorro.dto.records;
 
 import java.util.List;
 

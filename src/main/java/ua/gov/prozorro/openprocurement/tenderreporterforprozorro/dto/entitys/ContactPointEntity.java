@@ -1,4 +1,4 @@
-package ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.entitys;
+package ua.gov.prozorro.openprocurement.tenderreporterforprozorro.dto.entitys;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

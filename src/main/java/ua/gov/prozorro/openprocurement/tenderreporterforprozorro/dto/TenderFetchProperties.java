@@ -1,4 +1,4 @@
-package ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto;
+package ua.gov.prozorro.openprocurement.tenderreporterforprozorro.dto;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;

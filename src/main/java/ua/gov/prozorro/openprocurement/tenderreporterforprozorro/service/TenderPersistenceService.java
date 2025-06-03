@@ -1,8 +1,8 @@
-package ua.gov.prozorro.openprocurement.TenderReporterForProzorro.service;
+package ua.gov.prozorro.openprocurement.tenderreporterforprozorro.service;
 
 import org.springframework.stereotype.Service;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.entitys.*;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.records.TenderRecord;
+import ua.gov.prozorro.openprocurement.tenderreporterforprozorro.dto.entitys.*;
+import ua.gov.prozorro.openprocurement.tenderreporterforprozorro.dto.records.TenderRecord;
 
 import java.util.List;
 
@@ -16,14 +16,14 @@ public class TenderPersistenceService {
     }
 
     public void saveTenders(List<TenderRecord> records) {
-        for (TenderRecord record : records) {
-            TenderEntity entity = mapToEntity(record);
+        for (TenderRecord tenderRecord : records) {
+            TenderEntity entity = mapToEntity(tenderRecord);
             tenderRepository.save(entity);
         }
     }
 
-    private TenderEntity mapToEntity(TenderRecord record) {
-        var procuring = record.procuringEntity();
+    private TenderEntity mapToEntity(TenderRecord tenderRecord) {
+        var procuring = tenderRecord.procuringEntity();
 
         ContactPointEntity contact = new ContactPointEntity();
         contact.setName(procuring.contactPoint().name());
@@ -42,8 +42,8 @@ public class TenderPersistenceService {
         procuringEntity.setAddress(address);
 
         TenderEntity entity = new TenderEntity();
-        entity.setTenderId(record.id());
-        entity.setDateModified(record.dateModified());
+        entity.setTenderId(tenderRecord.id());
+        entity.setDateModified(tenderRecord.dateModified());
         entity.setProcuringEntity(procuringEntity);
 
         return entity;

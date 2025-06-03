@@ -1,12 +1,12 @@
-package ua.gov.prozorro.openprocurement.TenderReporterForProzorro.service;
+package ua.gov.prozorro.openprocurement.tenderreporterforprozorro.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.TenderFetchProperties;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.records.TenderRecord;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.records.TendersResponse;
+import ua.gov.prozorro.openprocurement.tenderreporterforprozorro.dto.TenderFetchProperties;
+import ua.gov.prozorro.openprocurement.tenderreporterforprozorro.dto.records.TenderRecord;
+import ua.gov.prozorro.openprocurement.tenderreporterforprozorro.dto.records.TendersResponse;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -14,18 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TenderService {
+public class TenderFetchService {
     private final WebClient webClient;
 
-    private final Logger logger = LoggerFactory.getLogger(TenderService.class);
+    private final Logger logger = LoggerFactory.getLogger(TenderFetchService.class);
 
     private final TenderFetchProperties tenderFetchProperties;
 
-    public TenderService(WebClient.Builder webClientBuilder, TenderFetchProperties tenderFetchProperties) {
+    private final TenderPersistenceService tenderPersistenceService;
+
+    public TenderFetchService(WebClient.Builder webClientBuilder, TenderFetchProperties tenderFetchProperties, TenderPersistenceService tenderPersistenceService) {
         this.webClient = webClientBuilder
                 .baseUrl("https://public.api.openprocurement.org/api/2.5")
                 .build();
         this.tenderFetchProperties = tenderFetchProperties;
+        this.tenderPersistenceService = tenderPersistenceService;
     }
 
     public List<TenderRecord> fetchAllTenders() {
@@ -60,6 +63,8 @@ public class TenderService {
             lastDateModified = batch.get(batch.size() - 1).dateModified().toString();
         }
         logger.info("List of tenders: {}", allTenderRecords);
+        //save results to database
+        tenderPersistenceService.saveTenders(allTenderRecords);
         return allTenderRecords;
     }
 

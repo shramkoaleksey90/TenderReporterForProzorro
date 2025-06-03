@@ -1,4 +1,4 @@
-package ua.gov.prozorro.openprocurement.TenderReporterForProzorro;
+package ua.gov.prozorro.openprocurement.tenderreporterforprozorro;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

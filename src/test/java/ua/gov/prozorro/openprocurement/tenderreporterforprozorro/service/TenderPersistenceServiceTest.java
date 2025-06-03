@@ -1,10 +1,10 @@
-package ua.gov.prozorro.openprocurement.TenderReporterForProzorro.service;
+package ua.gov.prozorro.openprocurement.tenderreporterforprozorro.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.entitys.TenderRepository;
-import ua.gov.prozorro.openprocurement.TenderReporterForProzorro.dto.records.*;
+import ua.gov.prozorro.openprocurement.tenderreporterforprozorro.dto.entitys.TenderRepository;
+import ua.gov.prozorro.openprocurement.tenderreporterforprozorro.dto.records.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class TenderPersistenceServiceTest {
+class TenderPersistenceServiceTest {
 
     @Autowired
     private TenderPersistenceService tenderPersistenceService;
