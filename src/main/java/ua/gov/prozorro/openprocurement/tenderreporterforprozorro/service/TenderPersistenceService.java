@@ -23,27 +23,43 @@ public class TenderPersistenceService {
     }
 
     private TenderEntity mapToEntity(TenderRecord tenderRecord) {
-        var procuring = tenderRecord.procuringEntity();
-
-        ContactPointEntity contact = new ContactPointEntity();
-        contact.setName(procuring.contactPoint().name());
-        contact.setEmail(procuring.contactPoint().email());
-        contact.setPhone(procuring.contactPoint().telephone());
-
-        AddressEntity address = new AddressEntity();
-        address.setStreetAddress(procuring.address().streetAddress());
-        address.setLocality(procuring.address().locality());
-        address.setRegion(procuring.address().region());
-
-        ProcuringEntityEntity procuringEntity = new ProcuringEntityEntity();
-        procuringEntity.setName(procuring.name());
-        procuringEntity.setIdentifierId(procuring.identifier().id());
-        procuringEntity.setContactPoint(contact);
-        procuringEntity.setAddress(address);
+        if (tenderRecord == null) {
+            throw new IllegalArgumentException("TenderRecord cannot be null");
+        }
 
         TenderEntity entity = new TenderEntity();
         entity.setTenderId(tenderRecord.id());
         entity.setDateModified(tenderRecord.dateModified());
+
+        var procuring = tenderRecord.procuringEntity();
+        if (procuring == null) {
+            throw new IllegalArgumentException("ProcuringEntity cannot be null");
+        }
+
+        ContactPointEntity contact = new ContactPointEntity();
+        if (procuring.contactPoint() != null) {
+            var contactPoint = procuring.contactPoint();
+            contact.setName(contactPoint.name());
+            contact.setEmail(contactPoint.email());
+            contact.setPhone(contactPoint.telephone());
+        }
+
+        AddressEntity address = new AddressEntity();
+        if (procuring.address() != null) {
+            var addressData = procuring.address();
+            address.setStreetAddress(addressData.streetAddress());
+            address.setLocality(addressData.locality());
+            address.setRegion(addressData.region());
+        }
+
+        ProcuringEntityEntity procuringEntity = new ProcuringEntityEntity();
+        procuringEntity.setName(procuring.name());
+        if (procuring.identifier() != null) {
+            procuringEntity.setIdentifierId(procuring.identifier().id());
+        }
+        procuringEntity.setContactPoint(contact);
+        procuringEntity.setAddress(address);
+
         entity.setProcuringEntity(procuringEntity);
 
         return entity;
