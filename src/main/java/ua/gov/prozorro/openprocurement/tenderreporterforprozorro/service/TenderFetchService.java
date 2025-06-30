@@ -21,14 +21,11 @@ public class TenderFetchService {
 
     private final TenderFetchProperties tenderFetchProperties;
 
-    private final TenderPersistenceService tenderPersistenceService;
-
-    public TenderFetchService(WebClient.Builder webClientBuilder, TenderFetchProperties tenderFetchProperties, TenderPersistenceService tenderPersistenceService) {
+    public TenderFetchService(WebClient.Builder webClientBuilder, TenderFetchProperties tenderFetchProperties) {
         this.webClient = webClientBuilder
                 .baseUrl("https://public.api.openprocurement.org/api/2.5")
                 .build();
         this.tenderFetchProperties = tenderFetchProperties;
-        this.tenderPersistenceService = tenderPersistenceService;
     }
 
     public List<TenderRecord> fetchAllTenders() {
@@ -63,8 +60,6 @@ public class TenderFetchService {
             lastDateModified = batch.get(batch.size() - 1).dateModified().toString();
         }
         logger.info("List of tenders: {}", allTenderRecords);
-        //save results to database
-        tenderPersistenceService.saveTenders(allTenderRecords);
         return allTenderRecords;
     }
 
